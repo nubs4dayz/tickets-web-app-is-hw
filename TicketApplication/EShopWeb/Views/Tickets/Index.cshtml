@@ -1,0 +1,76 @@
+﻿@model List<EShop.Domain.DomainModels.Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+     <div class="justify-content-md-center m-3">
+        <form asp-controller="Tickets" asp-action="ExportTickets" enctype="multipart/form-data">
+            <div class="form-group w-25">
+                <label for="genre">Insert Genre: </label>
+                <input type="search" id="genre" name="genre" class="form-control" />
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-outline-success">Export Tickets</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <a class="btn btn-success" asp-action="Create">Insert New Ticket</a>
+    </div>
+
+       @for (int i = 0; i < Model.Count; i++)
+       {
+           var item = Model[i];
+
+           if(i % 3 == 0)
+           {
+               @:<div class="row">
+           }
+
+        <div class="col-md-3 m-4">
+            <div class="card" style="width: 20rem; height: 35rem;">
+                <img class="card-img-top" src="@item.MoviePoster" style="height: 40%;" alt="Image for product!">
+
+                <div class="card-body">
+                    <h3 class="card-title">@item.MovieName</h3>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text">@item.MovieGenre</p>
+                        </div>
+                        <div class="col">
+                            <p class="card-text">@item.DateTime.ToString("dd-MM-yyyy")</p>
+                        </div>
+                    </div>
+                    <p class="card-text">@item.MovieDescription</p>
+
+
+                    <h6>Price: @item.TicketPrice ДЕН</h6>
+                </div>
+
+                <div class="card-footer">
+                    @if (@item.DateTime.Date > DateTime.Today)
+                    {
+                        <a asp-controller="Tickets" asp-action="AddTicketToCart" asp-route-id="@item.Id" class="btn btn-info">Add to Cart</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Tickets" asp-action="AddTicketToCart" asp-route-id="@item.Id" class="btn btn-info disabled">The Date Passed</a>
+                    }
+                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                    <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+
+
+           if(i % 3 == 2)
+           {
+               @:</div>
+           }
+       }
+</div>
